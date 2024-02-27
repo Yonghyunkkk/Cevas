@@ -33,5 +33,14 @@ public class CourseReviewController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
+    @DeleteMapping("/course-reviews/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete a course review")
+    public void deleteCourseReview(@PathVariable(name = "id") Long courseReviewId) {
+//        JwtUserInfo jwtUserInfo = jwtTokenProvider.getCurrentUserInfo();
+//        Long memberId = jwtUserInfo.getMemberId();
+        courseReviewService.deleteCourseReview(1L, courseReviewId);
+    }
+
 
 }

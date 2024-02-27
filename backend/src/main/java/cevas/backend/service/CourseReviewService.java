@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 import static cevas.backend.exception.ErrorInfo.*;
 
 @Service
@@ -66,5 +68,20 @@ public class CourseReviewService {
         // save created course review
         CourseReview savedCourseReview = courseReviewRepository.save(courseReview);
         return savedCourseReview.getId();
+    }
+
+    @Transactional
+    public void deleteCourseReview(Long memberId, Long courseReviewId) {
+
+        // check if courseReview exists in DB
+        CourseReview courseReview = courseReviewRepository.findById(courseReviewId)
+                .orElseThrow(() -> new CustomException(REVIEW_NOT_FOUND));
+
+        if (!Objects.equals(courseReview.getMember().getId(), memberId)) {
+            throw new CustomException(UNAUTHORIZED_OPERATION);
+        }
+
+        // delete course review
+        courseReviewRepository.delete(courseReview);
     }
 }

@@ -10,6 +10,7 @@ import cevas.backend.repository.CourseRepository;
 import cevas.backend.repository.CourseReviewRepository;
 import cevas.backend.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.media.SchemaProperties;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static cevas.backend.exception.ErrorInfo.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -34,6 +36,8 @@ class CourseReviewServiceTest {
     CourseRepository courseRepository;
     @Autowired
     CourseReviewRepository courseReviewRepository;
+    @Autowired
+    EntityManager em;
 
     @Test
     public void createCourseReview_Test() {
@@ -131,7 +135,51 @@ class CourseReviewServiceTest {
         }
     }
 
+    @Test
+    public void deleteCourseReview_Test() throws Exception {
+        //given
+        Member member = createMember();
+        Course course = createCourse();
+        CourseReview courseReview = createCourseReview(member, course);
 
+        //when
+        courseReviewService.deleteCourseReview(member.getId(), courseReview.getId());
+
+        //then
+        assertThat(courseReviewRepository.findById(courseReview.getId())).isEmpty();
+    }
+
+    @Test
+    public void deleteCourseReview_ReviewNotFound_Test() throws Exception {
+        //given
+        Member member = createMember();
+        Course course = createCourse();
+        CourseReview courseReview = createCourseReview(member, course);
+
+        try {
+            courseReviewService.deleteCourseReview(member.getId(), -1L);
+
+            fail("ReviewNotFoundException should be thrown.");
+        } catch (CustomException e) {
+            assertEquals(REVIEW_NOT_FOUND, e.getErrorInfo());
+        }
+    }
+
+    @Test
+    public void deleteCourseReview_UnauthorizedOperationException_Test() throws Exception {
+        //given
+        Member member = createMember();
+        Course course = createCourse();
+        CourseReview courseReview = createCourseReview(member, course);
+
+        try {
+            courseReviewService.deleteCourseReview(-1L, courseReview.getId());
+
+            fail("UnauthorizedOperationException should be thrown.");
+        } catch (CustomException e) {
+            assertEquals(UNAUTHORIZED_OPERATION, e.getErrorInfo());
+        }
+    }
 
     private Member createMember() {
         Member member = Member.createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
@@ -143,8 +191,27 @@ class CourseReviewServiceTest {
         return courseRepository.save(course);
     }
 
+    private CourseReview createCourseReview(Member member, Course course) {
+        CourseReview courseReview = CourseReview.createCourseReview(
+                member,
+                course,
+                "2024",
+                "A+",
+                5,
+                5,
+                5,
+                5,
+                5,
+                20,
+                20,
+                20,
+                30
+        );
+        return courseReviewRepository.save(courseReview);
+    }
+
     private CreateCourseReviewRequest createCourseReviewRequest(Long courseId) {
-        CreateCourseReviewRequest createCourseReviewRequest = new CreateCourseReviewRequest(
+        CreateCourseReviewRequest courseReviewRequest = new CreateCourseReviewRequest(
                 courseId,
                 "2024",
                 "A+",
@@ -158,7 +225,7 @@ class CourseReviewServiceTest {
                 20,
                 30
         );
-        return createCourseReviewRequest;
+        return courseReviewRequest;
     }
 
 }

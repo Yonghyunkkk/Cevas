@@ -61,25 +61,25 @@ public class CreateCourseReviewRequest {
     @NotNull
     @Min(0)
     @Max(100)
-    @Schema(example = "60")
+    @Schema(example = "20")
     private int finalExamRatio;
 
     @NotNull
     @Min(0)
     @Max(100)
-    @Schema(example = "60")
+    @Schema(example = "20")
     private int midTermRatio;
 
     @NotNull
     @Min(0)
     @Max(100)
-    @Schema(example = "60")
+    @Schema(example = "40")
     private int assignmentsRatio;
 
     @NotNull
     @Min(0)
     @Max(100)
-    @Schema(example = "60")
+    @Schema(example = "20")
     private int projectRatio;
 
     public int getTotalRatio() {
