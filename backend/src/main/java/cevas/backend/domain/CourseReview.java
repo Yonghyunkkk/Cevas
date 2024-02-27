@@ -83,4 +83,43 @@ public class CourseReview {
     @Max(value = 100, message = "Project ratio must be less than or equal to 100")
     @Column(name = "project_ratio", nullable = false)
     private int projectRatio;
+
+
+    // Constructor
+    public static CourseReview createCourseReview(
+            Member member,
+            Course course,
+            String academicYear,
+            String gpa,
+            int workload,
+            int lectureDifficulty,
+            int finalExamDifficulty,
+            int courseEntertainment,
+            int courseDelivery,
+            int finalExamRatio,
+            int midTermRatio,
+            int assignmentsRatio,
+            int projectRatio
+    ) {
+        CourseReview review = CourseReview.builder()
+                .member(member)
+                .course(course)
+                .academicYear(academicYear)
+                .gpa(gpa)
+                .workload(workload)
+                .lectureDifficulty(lectureDifficulty)
+                .finalExamDifficulty(finalExamDifficulty)
+                .courseEntertainment(courseEntertainment)
+                .courseDelivery(courseDelivery)
+                .finalExamRatio(finalExamRatio)
+                .midTermRatio(midTermRatio)
+                .assignmentsRatio(assignmentsRatio)
+                .projectRatio(projectRatio)
+                .build();
+
+        member.addReviews(review);
+        course.addReview(review);
+
+        return review;
+    }
 }
