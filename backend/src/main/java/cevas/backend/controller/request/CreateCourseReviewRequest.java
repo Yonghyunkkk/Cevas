@@ -7,11 +7,13 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import static cevas.backend.exception.ErrorInfo.TOTAL_RATIO_EXCEEDS;
 
 @Getter
+@AllArgsConstructor
 public class CreateCourseReviewRequest {
 
     @NotNull

@@ -40,9 +40,11 @@ public class Member {
     private String major;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<CourseReview> reviews = new ArrayList<>();
 
     @ManyToMany
+    @Builder.Default
     @JoinTable(name = "favorite_course",
             joinColumns = @JoinColumn(name = "member_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
@@ -51,5 +53,24 @@ public class Member {
     public void addReviews(CourseReview review) {
         this.reviews.add(review);
         review.setMember(this);
+    }
+
+    // Constructor
+    public static Member createMember(
+            String email,
+            String nickname,
+            String password,
+            String admissionYear,
+            String major
+    ) {
+        Member member = Member.builder()
+                .email(email)
+                .nickname(nickname)
+                .password(password)
+                .admissionYear(admissionYear)
+                .major(major)
+                .build();
+
+        return member;
     }
 }

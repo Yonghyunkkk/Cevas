@@ -7,7 +7,7 @@ public enum ErrorInfo {
     /**
      * Authentication
      */
-    MEMBER_NOT_FOUND(400, "MEMBER_NOT_FOUND", "Member with the given email does not exist."),
+    MEMBER_NOT_FOUND(400, "MEMBER_NOT_FOUND", "Member with the given id does not exist."),
 
     /**
      * Course
