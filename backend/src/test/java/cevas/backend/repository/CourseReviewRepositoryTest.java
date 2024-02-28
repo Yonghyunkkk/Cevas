@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,17 +29,52 @@ class CourseReviewRepositoryTest {
     @Test
     public void findByMemberIdAndCourseId_Test() throws Exception {
         //given
-        Member member = Member.createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
-        Member savedMember = memberRepository.save(member);
+        Member savedMember = createMember();
+        Course savedCourse = createCourse();
+        CourseReview savedCourseReview = createCourseReview(savedMember, savedCourse);
 
+        //when
+        CourseReview findCourseReview = courseReviewRepository.findByMemberIdAndCourseId(savedMember.getId(), savedCourse.getId());
+
+        //then
+        assertThat(findCourseReview.getId()).isEqualTo(savedCourseReview.getId());
+        assertThat(findCourseReview.getMember().getId()).isEqualTo(savedMember.getId());
+        assertThat(findCourseReview.getCourse().getId()).isEqualTo(savedCourse.getId());
+    }
+
+    @Test
+    public void findByMemberIdAndId() throws Exception {
+        //given
+        Member savedMember = createMember();
+        Course savedCourse = createCourse();
+        CourseReview savedCourseReview = createCourseReview(savedMember, savedCourse);
+        
+        //when
+        CourseReview findCourseReview = courseReviewRepository.findByMemberIdAndId(savedMember.getId(), savedCourseReview.getId()).get();
+
+        //then
+        assertThat(findCourseReview.getId()).isEqualTo(savedCourseReview.getId());
+        assertThat(findCourseReview.getMember().getId()).isEqualTo(savedMember.getId());
+        assertThat(findCourseReview.getCourse().getId()).isEqualTo(savedCourse.getId());
+    }
+
+    private Member createMember() {
+        Member member = Member.createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        return memberRepository.save(member);
+    }
+
+    private Course createCourse() {
         Course course = Course.createCourse("COMP3230", "Operating System", "Engineering");
         Course savedCourse = courseRepository.save(course);
+        return savedCourse;
+    }
 
-
+    private CourseReview createCourseReview(Member savedMember, Course savedCourse) {
         CourseReview courseReview = CourseReview.createCourseReview(
                 savedMember,
                 savedCourse,
                 "2024",
+                "Dr. Luo",
                 "A+",
                 5,
                 5,
@@ -50,13 +87,6 @@ class CourseReviewRepositoryTest {
                 30
         );
         CourseReview savedCourseReview = courseReviewRepository.save(courseReview);
-
-        //when
-        CourseReview findCourseReview = courseReviewRepository.findByMemberIdAndCourseId(savedMember.getId(), savedCourse.getId());
-
-        //then
-        assertThat(findCourseReview.getId()).isEqualTo(savedCourseReview.getId());
-        assertThat(findCourseReview.getMember().getId()).isEqualTo(savedMember.getId());
-        assertThat(findCourseReview.getCourse().getId()).isEqualTo(savedCourse.getId());
+        return savedCourseReview;
     }
 }

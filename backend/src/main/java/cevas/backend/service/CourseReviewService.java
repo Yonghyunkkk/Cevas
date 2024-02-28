@@ -1,6 +1,7 @@
 package cevas.backend.service;
 
 import cevas.backend.controller.request.CreateCourseReviewRequest;
+import cevas.backend.controller.request.UpdateCourseReviewRequest;
 import cevas.backend.domain.Course;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.domain.Member;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 import static cevas.backend.exception.ErrorInfo.*;
@@ -25,6 +27,15 @@ public class CourseReviewService {
     private final CourseReviewRepository courseReviewRepository;
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
+
+    public List<CourseReview> getAllCourseReviews(Long memberId) {
+        return courseReviewRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    }
+    public CourseReview getSingleCourseReview(Long memberId, Long courseReviewId) {
+        return courseReviewRepository.findByMemberIdAndId(memberId, courseReviewId)
+                .orElseThrow(() -> new CustomException(REVIEW_NOT_FOUND));
+    }
 
     @Transactional
     public Long createCourseReview(Long memberId, CreateCourseReviewRequest courseReviewRequest) {
@@ -53,6 +64,7 @@ public class CourseReviewService {
                 member,
                 course,
                 courseReviewRequest.getAcademicYear(),
+                courseReviewRequest.getProfessorName(),
                 courseReviewRequest.getGpa(),
                 courseReviewRequest.getWorkload(),
                 courseReviewRequest.getLectureDifficulty(),
@@ -71,12 +83,59 @@ public class CourseReviewService {
     }
 
     @Transactional
+    public void updateCourseReview(
+            Long memberId,
+            Long courseReviewId,
+            UpdateCourseReviewRequest courseReviewRequest) {
+
+        // check if member exists in DB
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        // check if course exists in DB
+        Course course = courseRepository.findById(courseReviewRequest.getCourseId())
+                .orElseThrow(() -> new CustomException(COURSE_NOT_FOUND));
+
+        // check if review exists in DB
+        CourseReview courseReview = courseReviewRepository.findByMemberIdAndId(memberId, courseReviewId)
+                .orElseThrow(() -> new CustomException(REVIEW_NOT_FOUND));
+
+        // check if total ratio exceeds 100
+        if (courseReviewRequest.getTotalRatio() > 100) {
+            throw new CustomException(TOTAL_RATIO_EXCEEDS);
+        }
+
+        // check if member has authorized access
+        if (!Objects.equals(courseReview.getMember().getId(), memberId)) {
+            throw new CustomException(UNAUTHORIZED_OPERATION);
+        }
+
+        courseReview.updateCourseReview(
+                member,
+                course,
+                courseReviewRequest.getAcademicYear(),
+                courseReviewRequest.getProfessorName(),
+                courseReviewRequest.getGpa(),
+                courseReviewRequest.getWorkload(),
+                courseReviewRequest.getLectureDifficulty(),
+                courseReviewRequest.getFinalExamDifficulty(),
+                courseReviewRequest.getCourseEntertainment(),
+                courseReviewRequest.getCourseDelivery(),
+                courseReviewRequest.getFinalExamRatio(),
+                courseReviewRequest.getMidTermRatio(),
+                courseReviewRequest.getAssignmentsRatio(),
+                courseReviewRequest.getProjectRatio()
+        );
+    }
+
+    @Transactional
     public void deleteCourseReview(Long memberId, Long courseReviewId) {
 
         // check if courseReview exists in DB
         CourseReview courseReview = courseReviewRepository.findById(courseReviewId)
                 .orElseThrow(() -> new CustomException(REVIEW_NOT_FOUND));
 
+        // check if member has authorized access
         if (!Objects.equals(courseReview.getMember().getId(), memberId)) {
             throw new CustomException(UNAUTHORIZED_OPERATION);
         }

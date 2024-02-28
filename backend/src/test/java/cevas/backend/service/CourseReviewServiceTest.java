@@ -1,24 +1,21 @@
 package cevas.backend.service;
 
 import cevas.backend.controller.request.CreateCourseReviewRequest;
+import cevas.backend.controller.request.UpdateCourseReviewRequest;
 import cevas.backend.domain.Course;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.domain.Member;
 import cevas.backend.exception.CustomException;
-import cevas.backend.exception.ErrorInfo;
 import cevas.backend.repository.CourseRepository;
 import cevas.backend.repository.CourseReviewRepository;
 import cevas.backend.repository.MemberRepository;
-import io.swagger.v3.oas.annotations.media.SchemaProperties;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
 
 import static cevas.backend.exception.ErrorInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,9 +38,9 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_Test() {
-        Member member = createMember();
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
 
-        Course course = createCourse();
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
         CreateCourseReviewRequest createCourseReviewRequest = createCourseReviewRequest(course.getId());
 
@@ -57,7 +54,7 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_MemberNotFoundException_Test() throws Exception {
-        Course course = createCourse();
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
         CreateCourseReviewRequest createCourseReviewRequest = createCourseReviewRequest(course.getId());
 
@@ -72,9 +69,9 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_CourseNotFoundException_Test() throws Exception {
-        Member member = createMember();
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
 
-        Course course = createCourse();
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
         CreateCourseReviewRequest createCourseReviewRequest = createCourseReviewRequest(-1L);
 
@@ -89,9 +86,9 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_ReviewAlreadyExistsException_Test() throws Exception {
-        Member member = createMember();
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
 
-        Course course = createCourse();
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
         CreateCourseReviewRequest createCourseReviewRequest = createCourseReviewRequest(course.getId());
 
@@ -107,13 +104,14 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_TotalRatioExceedsException_Test() throws Exception {
-        Member member = createMember();
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
 
-        Course course = createCourse();
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
         CreateCourseReviewRequest createCourseReviewRequest = new CreateCourseReviewRequest(
                 course.getId(),
                 "2024",
+                "Dr. Luo",
                 "A+",
                 5,
                 5,
@@ -138,8 +136,8 @@ class CourseReviewServiceTest {
     @Test
     public void deleteCourseReview_Test() throws Exception {
         //given
-        Member member = createMember();
-        Course course = createCourse();
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
         //when
@@ -152,8 +150,8 @@ class CourseReviewServiceTest {
     @Test
     public void deleteCourseReview_ReviewNotFound_Test() throws Exception {
         //given
-        Member member = createMember();
-        Course course = createCourse();
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
         try {
@@ -168,8 +166,8 @@ class CourseReviewServiceTest {
     @Test
     public void deleteCourseReview_UnauthorizedOperationException_Test() throws Exception {
         //given
-        Member member = createMember();
-        Course course = createCourse();
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
         try {
@@ -181,13 +179,75 @@ class CourseReviewServiceTest {
         }
     }
 
-    private Member createMember() {
-        Member member = Member.createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+    @Test
+    public void updateCourseReview_Test() throws Exception {
+        //given
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
+        CourseReview courseReview = createCourseReview(member, course);
+
+        //when
+        UpdateCourseReviewRequest updateCourseReviewRequest = new UpdateCourseReviewRequest(
+                courseReview.getCourse().getId(),
+                "2022",
+                courseReview.getProfessorName(),
+                courseReview.getGpa(),
+                courseReview.getWorkload(),
+                courseReview.getLectureDifficulty(),
+                courseReview.getFinalExamDifficulty(),
+                courseReview.getCourseEntertainment(),
+                courseReview.getCourseDelivery(),
+                courseReview.getFinalExamRatio(),
+                courseReview.getMidTermRatio(),
+                courseReview.getAssignmentsRatio(),
+                courseReview.getProjectRatio()
+        );
+
+        courseReviewService.updateCourseReview(member.getId(), courseReview.getId(), updateCourseReviewRequest);
+
+        //then
+        assertThat(courseReviewRepository.findById(courseReview.getId()).get().getAcademicYear()).isEqualTo("2022");
+    }
+
+
+    @Test
+    public void getSingleCourseReview_Test() throws Exception {
+        //given
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Course course = createCourse("COMP3230", "Operating System", "Engineering");
+        CourseReview courseReview = createCourseReview(member, course);
+
+        //when
+        CourseReview findCourseReview = courseReviewService.getSingleCourseReview(member.getId(), courseReview.getId());
+
+        //then
+        assertThat(courseReview).isEqualTo(findCourseReview);
+    }
+
+    @Test
+    public void getAllCourseReview_Test() throws Exception {
+        //given
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Course courseA = createCourse("COMP3230", "Operating System", "Engineering");
+        Course courseB = createCourse("COMP2413", "Network", "Engineering");
+
+        CourseReview courseReview1 = createCourseReview(member, courseA);
+        CourseReview courseReview2 = createCourseReview(member, courseB);
+
+        //when
+        List<CourseReview> allCourseReviews = courseReviewService.getAllCourseReviews(member.getId());
+
+        //then
+        assertThat(allCourseReviews.size()).isEqualTo(2);
+    }
+
+    private Member createMember(String mail, String name, String pwd, String admissionYear, String major) {
+        Member member = Member.createMember(mail, name, pwd, admissionYear, major);
         return memberRepository.save(member);
     }
 
-    private Course createCourse() {
-        Course course = Course.createCourse("COMP3230", "Operating System", "Engineering");
+    private Course createCourse(String courseCode, String courseName, String faculty) {
+        Course course = Course.createCourse(courseCode, courseName, faculty);
         return courseRepository.save(course);
     }
 
@@ -196,6 +256,7 @@ class CourseReviewServiceTest {
                 member,
                 course,
                 "2024",
+                "Dr. Luo",
                 "A+",
                 5,
                 5,
@@ -214,6 +275,7 @@ class CourseReviewServiceTest {
         CreateCourseReviewRequest courseReviewRequest = new CreateCourseReviewRequest(
                 courseId,
                 "2024",
+                "Dr. Bob",
                 "A+",
                 5,
                 5,
@@ -227,5 +289,4 @@ class CourseReviewServiceTest {
         );
         return courseReviewRequest;
     }
-
 }

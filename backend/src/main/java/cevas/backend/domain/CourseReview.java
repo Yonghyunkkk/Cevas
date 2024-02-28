@@ -36,6 +36,10 @@ public class CourseReview {
     private String academicYear;
 
     @NotBlank
+    @Column(name = "professor_name", nullable = false, length = 100)
+    private String professorName;
+
+    @NotBlank
     @Column(name = "gpa", nullable = false, length = 2)
     private String gpa;
 
@@ -90,6 +94,7 @@ public class CourseReview {
             Member member,
             Course course,
             String academicYear,
+            String professorName,
             String gpa,
             int workload,
             int lectureDifficulty,
@@ -105,6 +110,7 @@ public class CourseReview {
                 .member(member)
                 .course(course)
                 .academicYear(academicYear)
+                .professorName(professorName)
                 .gpa(gpa)
                 .workload(workload)
                 .lectureDifficulty(lectureDifficulty)
@@ -122,4 +128,37 @@ public class CourseReview {
 
         return review;
     }
+
+    public void updateCourseReview(
+            Member member,
+            Course course,
+            String academicYear,
+            String professorName,
+            String gpa,
+            int workload,
+            int lectureDifficulty,
+            int finalExamDifficulty,
+            int courseEntertainment,
+            int courseDelivery,
+            int finalExamRatio,
+            int midTermRatio,
+            int assignmentsRatio,
+            int projectRatio
+    ) {
+        this.member = member;
+        this.course = course;
+        this.academicYear = academicYear;
+        this.professorName = professorName;
+        this.gpa = gpa;
+        this.workload = workload;
+        this.lectureDifficulty = lectureDifficulty;
+        this.finalExamDifficulty = finalExamDifficulty;
+        this.courseEntertainment = courseEntertainment;
+        this.courseDelivery = courseDelivery;
+        this.finalExamRatio = finalExamRatio;
+        this.midTermRatio = midTermRatio;
+        this.assignmentsRatio = assignmentsRatio;
+        this.projectRatio = projectRatio;
+    }
+
 }

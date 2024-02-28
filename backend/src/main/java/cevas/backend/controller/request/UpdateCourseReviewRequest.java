@@ -1,23 +1,16 @@
 package cevas.backend.controller.request;
 
-import cevas.backend.exception.CustomException;
-import cevas.backend.exception.ErrorInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import static cevas.backend.exception.ErrorInfo.TOTAL_RATIO_EXCEEDS;
 
 @Getter
 @AllArgsConstructor
-public class CreateCourseReviewRequest {
-
+public class UpdateCourseReviewRequest {
     @NotNull
     @Schema(example = "1")
     private Long courseId;
