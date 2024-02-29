@@ -32,12 +32,15 @@ public class Course {
     private String faculty;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Subclass> subclasses = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<CourseReview> reviews = new ArrayList<>();
 
     @ManyToMany(mappedBy = "favoriteCourses")
+    @Builder.Default
     private List<Member> members = new ArrayList<>();
 
     public void addSubclass(Subclass subclass) {
@@ -48,5 +51,22 @@ public class Course {
     public void addReview(CourseReview review) {
         this.reviews.add(review);
         review.setCourse(this);
+    }
+
+    public static Course createCourse(
+            String courseCode,
+            String courseName,
+            String faculty
+    ) {
+        Course course = Course.builder()
+                .courseCode(courseCode)
+                .courseName(courseName)
+                .faculty(faculty)
+                .subclasses(new ArrayList<>())
+                .reviews(new ArrayList<>())
+                .members(new ArrayList<>())
+                .build();
+
+        return course;
     }
 }

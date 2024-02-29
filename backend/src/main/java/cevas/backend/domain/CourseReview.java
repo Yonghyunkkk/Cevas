@@ -36,6 +36,10 @@ public class CourseReview {
     private String academicYear;
 
     @NotBlank
+    @Column(name = "professor_name", nullable = false, length = 100)
+    private String professorName;
+
+    @NotBlank
     @Column(name = "gpa", nullable = false, length = 2)
     private String gpa;
 
@@ -83,4 +87,78 @@ public class CourseReview {
     @Max(value = 100, message = "Project ratio must be less than or equal to 100")
     @Column(name = "project_ratio", nullable = false)
     private int projectRatio;
+
+
+    // Constructor
+    public static CourseReview createCourseReview(
+            Member member,
+            Course course,
+            String academicYear,
+            String professorName,
+            String gpa,
+            int workload,
+            int lectureDifficulty,
+            int finalExamDifficulty,
+            int courseEntertainment,
+            int courseDelivery,
+            int finalExamRatio,
+            int midTermRatio,
+            int assignmentsRatio,
+            int projectRatio
+    ) {
+        CourseReview review = CourseReview.builder()
+                .member(member)
+                .course(course)
+                .academicYear(academicYear)
+                .professorName(professorName)
+                .gpa(gpa)
+                .workload(workload)
+                .lectureDifficulty(lectureDifficulty)
+                .finalExamDifficulty(finalExamDifficulty)
+                .courseEntertainment(courseEntertainment)
+                .courseDelivery(courseDelivery)
+                .finalExamRatio(finalExamRatio)
+                .midTermRatio(midTermRatio)
+                .assignmentsRatio(assignmentsRatio)
+                .projectRatio(projectRatio)
+                .build();
+
+        member.addReviews(review);
+        course.addReview(review);
+
+        return review;
+    }
+
+    public void updateCourseReview(
+            Member member,
+            Course course,
+            String academicYear,
+            String professorName,
+            String gpa,
+            int workload,
+            int lectureDifficulty,
+            int finalExamDifficulty,
+            int courseEntertainment,
+            int courseDelivery,
+            int finalExamRatio,
+            int midTermRatio,
+            int assignmentsRatio,
+            int projectRatio
+    ) {
+        this.member = member;
+        this.course = course;
+        this.academicYear = academicYear;
+        this.professorName = professorName;
+        this.gpa = gpa;
+        this.workload = workload;
+        this.lectureDifficulty = lectureDifficulty;
+        this.finalExamDifficulty = finalExamDifficulty;
+        this.courseEntertainment = courseEntertainment;
+        this.courseDelivery = courseDelivery;
+        this.finalExamRatio = finalExamRatio;
+        this.midTermRatio = midTermRatio;
+        this.assignmentsRatio = assignmentsRatio;
+        this.projectRatio = projectRatio;
+    }
+
 }
