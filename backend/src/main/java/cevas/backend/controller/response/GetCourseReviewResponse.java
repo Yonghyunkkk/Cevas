@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class GetCourseReviewResponse {
 
     private Long courseId;
@@ -25,11 +24,15 @@ public class GetCourseReviewResponse {
 
     private int lectureDifficulty;
 
+    private int lectureQuality;
+
     private int finalExamDifficulty;
 
     private int courseEntertainment;
 
     private int courseDelivery;
+
+    private int courseInteractivity;
 
     private int finalExamRatio;
 

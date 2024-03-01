@@ -43,6 +43,12 @@ public class UpdateCourseReviewRequest {
     @Min(1)
     @Max(10)
     @Schema(example = "1")
+    private int lectureQuality;
+
+    @NotNull
+    @Min(1)
+    @Max(10)
+    @Schema(example = "1")
     private int finalExamDifficulty;
 
     @NotNull
@@ -56,6 +62,12 @@ public class UpdateCourseReviewRequest {
     @Max(10)
     @Schema(example = "1")
     private int courseDelivery;
+
+    @NotNull
+    @Min(1)
+    @Max(10)
+    @Schema(example = "1")
+    private int courseInteractivity;
 
     @NotNull
     @Min(0)

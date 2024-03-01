@@ -5,11 +5,14 @@ import cevas.backend.controller.request.UpdateCourseReviewRequest;
 import cevas.backend.domain.Course;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.domain.Member;
+import cevas.backend.domain.QMember;
 import cevas.backend.exception.CustomException;
 import cevas.backend.repository.CourseRepository;
 import cevas.backend.repository.CourseReviewRepository;
 import cevas.backend.repository.MemberRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -118,6 +121,8 @@ class CourseReviewServiceTest {
                 5,
                 5,
                 5,
+                5,
+                5,
                 50,
                 20,
                 20,
@@ -193,10 +198,12 @@ class CourseReviewServiceTest {
                 courseReview.getProfessorName(),
                 courseReview.getGpa(),
                 courseReview.getWorkload(),
+                courseReview.getLectureQuality(),
                 courseReview.getLectureDifficulty(),
                 courseReview.getFinalExamDifficulty(),
                 courseReview.getCourseEntertainment(),
                 courseReview.getCourseDelivery(),
+                courseReview.getCourseInteractivity(),
                 courseReview.getFinalExamRatio(),
                 courseReview.getMidTermRatio(),
                 courseReview.getAssignmentsRatio(),
@@ -241,6 +248,20 @@ class CourseReviewServiceTest {
         assertThat(allCourseReviews.size()).isEqualTo(2);
     }
 
+    @Test
+    void contextLoads() {
+        Member hello = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        em.persist(hello);
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        QMember qMember = QMember.member; //Querydsl Q타입 동작 확인
+        Member result = query
+                .selectFrom(qMember)
+                .fetchOne();
+        Assertions.assertThat(result).isEqualTo(hello);
+//lombok 동작 확인 (hello.getId())
+        Assertions.assertThat(result.getId()).isEqualTo(hello.getId());
+    }
+
     private Member createMember(String mail, String name, String pwd, String admissionYear, String major) {
         Member member = Member.createMember(mail, name, pwd, admissionYear, major);
         return memberRepository.save(member);
@@ -263,6 +284,8 @@ class CourseReviewServiceTest {
                 5,
                 5,
                 5,
+                5,
+                5,
                 20,
                 20,
                 20,
@@ -278,6 +301,8 @@ class CourseReviewServiceTest {
                 "Dr. Bob",
                 "A+",
                 5,
+                5,
+                6,
                 5,
                 5,
                 5,

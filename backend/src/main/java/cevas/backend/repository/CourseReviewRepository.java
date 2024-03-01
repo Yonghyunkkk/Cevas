@@ -19,4 +19,7 @@ public interface CourseReviewRepository extends JpaRepository<CourseReview, Long
 
     @Query("SELECT cr FROM CourseReview cr LEFT JOIN FETCH cr.course WHERE cr.member.id = :memberId")
     Optional<List<CourseReview>> findByMemberId(@Param("memberId") Long memberId);
+
+    @Query("SELECT cr FROM CourseReview cr LEFT JOIN FETCH cr.course WHERE cr.course.id = :courseId")
+    Optional<List<CourseReview>> findByCourseId(@Param("courseId") Long courseId);
 }

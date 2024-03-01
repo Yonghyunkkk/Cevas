@@ -28,7 +28,7 @@ public class CourseReviewController {
     private final CourseReviewMapper courseReviewMapper;
 
     @GetMapping("/course-reviews")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all course reviews")
     public ResponseEntity<List<GetCourseReviewResponse>> getAllCourseReviews() {
 //        JwtUserInfo jwtUserInfo = jwtTokenProvider.getCurrentUserInfo();
@@ -44,7 +44,7 @@ public class CourseReviewController {
     }
     
     @GetMapping("/course-reviews/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get one course review")
     public ResponseEntity<GetCourseReviewResponse> getSingleCourseReview(@PathVariable(name = "id") Long courseReviewId) {
 //        JwtUserInfo jwtUserInfo = jwtTokenProvider.getCurrentUserInfo();

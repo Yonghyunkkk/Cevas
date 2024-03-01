@@ -84,7 +84,9 @@ class CourseReviewRepositoryTest {
                 20,
                 20,
                 20,
-                30
+                30,
+                10,
+                20
         );
         CourseReview savedCourseReview = courseReviewRepository.save(courseReview);
         return savedCourseReview;

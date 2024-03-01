@@ -48,6 +48,11 @@ public class CourseReview {
     @Column(name = "workload", nullable = false)
     private int workload;
 
+    @Min(value = 1, message = "Lecture quality must be greater than zero")
+    @Max(value = 10, message = "Lecture quality must be less than or equal to 10")
+    @Column(name = "lecture_quality", nullable = false)
+    private int lectureQuality;
+
     @Min(value = 1, message = "Lecture difficulty must be greater than zero")
     @Max(value = 10, message = "Lecture difficulty must be less than or equal to 10")
     @Column(name = "lecture_difficulty", nullable = false)
@@ -67,6 +72,11 @@ public class CourseReview {
     @Max(value = 10, message = "Course delivery must be less than or equal to 10")
     @Column(name = "course_delivery", nullable = false)
     private int courseDelivery;
+
+    @Min(value = 1, message = "Course interactivity must be greater than zero")
+    @Max(value = 10, message = "Course interactivity must be less than or equal to 10")
+    @Column(name = "course_interactivity", nullable = false)
+    private int courseInteractivity;
 
     @Min(value = 0, message = "Final exam ratio must be greater than -1")
     @Max(value = 100, message = "Final exam ratio must be less than or equal to 100")
@@ -98,9 +108,11 @@ public class CourseReview {
             String gpa,
             int workload,
             int lectureDifficulty,
+            int lectureQuality,
             int finalExamDifficulty,
             int courseEntertainment,
             int courseDelivery,
+            int courseInteractivity,
             int finalExamRatio,
             int midTermRatio,
             int assignmentsRatio,
@@ -114,9 +126,11 @@ public class CourseReview {
                 .gpa(gpa)
                 .workload(workload)
                 .lectureDifficulty(lectureDifficulty)
+                .lectureQuality(lectureQuality)
                 .finalExamDifficulty(finalExamDifficulty)
                 .courseEntertainment(courseEntertainment)
                 .courseDelivery(courseDelivery)
+                .courseInteractivity(courseInteractivity)
                 .finalExamRatio(finalExamRatio)
                 .midTermRatio(midTermRatio)
                 .assignmentsRatio(assignmentsRatio)
@@ -137,9 +151,11 @@ public class CourseReview {
             String gpa,
             int workload,
             int lectureDifficulty,
+            int lectureQuality,
             int finalExamDifficulty,
             int courseEntertainment,
             int courseDelivery,
+            int courseInteractivity,
             int finalExamRatio,
             int midTermRatio,
             int assignmentsRatio,
@@ -152,9 +168,11 @@ public class CourseReview {
         this.gpa = gpa;
         this.workload = workload;
         this.lectureDifficulty = lectureDifficulty;
+        this.lectureQuality = lectureQuality;
         this.finalExamDifficulty = finalExamDifficulty;
         this.courseEntertainment = courseEntertainment;
         this.courseDelivery = courseDelivery;
+        this.courseInteractivity = courseInteractivity;
         this.finalExamRatio = finalExamRatio;
         this.midTermRatio = midTermRatio;
         this.assignmentsRatio = assignmentsRatio;
