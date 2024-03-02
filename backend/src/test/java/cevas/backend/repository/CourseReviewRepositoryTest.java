@@ -27,7 +27,7 @@ class CourseReviewRepositoryTest {
     CourseReviewRepository courseReviewRepository;
 
     @Test
-    public void findByMemberIdAndCourseId_Test() throws Exception {
+    public void findByMemberIdAndCourseId() throws Exception {
         //given
         Member savedMember = createMember();
         Course savedCourse = createCourse();

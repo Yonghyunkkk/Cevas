@@ -3,6 +3,7 @@ package cevas.backend.repository;
 import cevas.backend.domain.QCourse;
 import cevas.backend.domain.QCourseReview;
 import cevas.backend.dto.CourseReviewCriteriaCountsDto;
+import cevas.backend.dto.CourseReviewLectureQualityDto;
 import cevas.backend.dto.CourseReviewPentagonDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -84,6 +85,17 @@ class CourseReviewQueryRepositoryTest {
             assertThat(courseReviewPentagonDto.getFinalExamDifficulty()).isEqualTo(6.666666666666667);
             assertThat(courseReviewPentagonDto.getWorkLoad()).isEqualTo(8.333333333333334);
             assertThat(courseReviewPentagonDto.getLectureQuality()).isEqualTo(8);
+        }
+    }
+
+    @Test
+    public void getAverageForLectureQuality() throws Exception {
+        List<CourseReviewLectureQualityDto> averageForLectureQuality = courseReviewQueryRepository.findAverageForLectureQuality(1L, null, null);
+
+        for (CourseReviewLectureQualityDto courseReviewLectureQualityDto : averageForLectureQuality) {
+            assertThat(courseReviewLectureQualityDto.getEntertainment()).isEqualTo(50);
+            assertThat(courseReviewLectureQualityDto.getDelivery()).isEqualTo(50);
+            assertThat(courseReviewLectureQualityDto.getInteractivity()).isEqualTo(50);
         }
     }
 

@@ -3,6 +3,7 @@ package cevas.backend.service;
 import cevas.backend.controller.response.GetCourseOverviewVisualizationResponse;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.dto.CourseReviewCriteriaCountsDto;
+import cevas.backend.dto.CourseReviewLectureQualityDto;
 import cevas.backend.dto.CourseReviewPentagonDto;
 import cevas.backend.exception.CustomException;
 import cevas.backend.exception.ErrorInfo;
@@ -51,13 +52,17 @@ public class VisualizationService {
         // get overall average for each category for petagon chart
         List<CourseReviewPentagonDto> averageForPentagon = courseReviewQueryRepository.findAverageForPentagon(courseId, year, professorName);
 
+        // get average for each category in lecture quality
+        List<CourseReviewLectureQualityDto> averageForLectureQuality = courseReviewQueryRepository.findAverageForLectureQuality(courseId, year, professorName);
+
         return new GetCourseOverviewVisualizationResponse(
                 totalCourseReviews,
                 gpaCounts,
                 workloadCounts,
                 lectureDifficultyCounts,
                 finalExamDifficultyCounts,
-                averageForPentagon
+                averageForPentagon,
+                averageForLectureQuality
         );
     }
 }

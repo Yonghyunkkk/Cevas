@@ -4,6 +4,7 @@ package cevas.backend.repository;
 import cevas.backend.domain.QCourse;
 import cevas.backend.domain.QCourseReview;
 import cevas.backend.dto.CourseReviewCriteriaCountsDto;
+import cevas.backend.dto.CourseReviewLectureQualityDto;
 import cevas.backend.dto.CourseReviewPentagonDto;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -98,6 +99,17 @@ public class CourseReviewQueryRepository {
                 .from(courseReview)
                 .where(courseIdEq(courseId), yearEq(year), professorNameEq(professorName))
                 .groupBy(category)
+                .fetch();
+    }
+
+    public List<CourseReviewLectureQualityDto> findAverageForLectureQuality(Long courseId, String year, String professorName) {
+        return queryFactory
+                .select(Projections.constructor(CourseReviewLectureQualityDto.class,
+                        courseReview.courseEntertainment.avg().multiply(10),
+                        courseReview.courseDelivery.avg().multiply(10),
+                        courseReview.courseEntertainment.avg().multiply(10)))
+                .from(courseReview)
+                .where(courseIdEq(courseId), yearEq(year), professorNameEq(professorName))
                 .fetch();
     }
 

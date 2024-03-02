@@ -1,6 +1,7 @@
 package cevas.backend.controller.response;
 
 import cevas.backend.dto.CourseReviewCriteriaCountsDto;
+import cevas.backend.dto.CourseReviewLectureQualityDto;
 import cevas.backend.dto.CourseReviewPentagonDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +22,6 @@ public class GetCourseOverviewVisualizationResponse {
     private List<CourseReviewCriteriaCountsDto> finalExamDifficulty;
 
     private List<CourseReviewPentagonDto> pentagon;
+
+    private List<CourseReviewLectureQualityDto> lectureQuality;
 }
