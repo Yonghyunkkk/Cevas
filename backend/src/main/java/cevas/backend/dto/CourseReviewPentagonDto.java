@@ -1,9 +1,16 @@
 package cevas.backend.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+
+@Getter
+@AllArgsConstructor
 public class CourseReviewPentagonDto {
-    private String criteria;
-    private Long overall;
+    private Double gpa;
+    private Double lectureDifficulty;
+    private Double finalExamDifficulty;
+    private Double workLoad;
+    private Double lectureQuality;
 }

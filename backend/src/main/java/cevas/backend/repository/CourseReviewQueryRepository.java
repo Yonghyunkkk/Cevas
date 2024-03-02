@@ -35,7 +35,7 @@ public class CourseReviewQueryRepository {
 
     public List<CourseReviewCriteriaCountsDto> findGpaCounts(Long courseId, String year, String professorName) {
         return queryFactory
-                .select(Projections.fields(CourseReviewCriteriaCountsDto.class,
+                .select(Projections.constructor(CourseReviewCriteriaCountsDto.class,
                         courseReview.gpa,
                         courseReview.count()))
                 .from(courseReview)
@@ -46,21 +46,21 @@ public class CourseReviewQueryRepository {
 
     public List<CourseReviewPentagonDto> findAverageForPentagon(Long courseId, String year, String professorName) {
         NumberExpression<Double> gpaNumeric = new CaseBuilder()
-                .when(courseReview.gpa.eq("A+")).then(4.3)
-                .when(courseReview.gpa.eq("A")).then(4.0)
-                .when(courseReview.gpa.eq("A-")).then(3.7)
-                .when(courseReview.gpa.eq("B+")).then(3.3)
-                .when(courseReview.gpa.eq("B-")).then(3.0)
-                .when(courseReview.gpa.eq("B")).then(2.7)
-                .when(courseReview.gpa.eq("C+")).then(2.3)
-                .when(courseReview.gpa.eq("C-")).then(2.0)
-                .when(courseReview.gpa.eq("C")).then(1.7)
-                .when(courseReview.gpa.eq("D+")).then(1.3)
-                .when(courseReview.gpa.eq("D")).then(1.0)
+                .when(courseReview.gpa.eq("A+")).then(10.0)
+                .when(courseReview.gpa.eq("A")).then(9.0)
+                .when(courseReview.gpa.eq("A-")).then(8.0)
+                .when(courseReview.gpa.eq("B+")).then(7.0)
+                .when(courseReview.gpa.eq("B-")).then(6.0)
+                .when(courseReview.gpa.eq("B")).then(5.0)
+                .when(courseReview.gpa.eq("C+")).then(4.0)
+                .when(courseReview.gpa.eq("C-")).then(3.0)
+                .when(courseReview.gpa.eq("C")).then(2.0)
+                .when(courseReview.gpa.eq("D+")).then(1.0)
+                .when(courseReview.gpa.eq("D")).then(0.5)
                 .otherwise(0.0);
 
         return queryFactory
-                .select(Projections.fields(CourseReviewPentagonDto.class,
+                .select(Projections.constructor(CourseReviewPentagonDto.class,
                         gpaNumeric.avg().as("gpa"),
                         courseReview.lectureDifficulty.avg(),
                         courseReview.finalExamDifficulty.avg(),
@@ -92,7 +92,7 @@ public class CourseReviewQueryRepository {
                 .otherwise("Very Heavy");
 
         return queryFactory
-                .select(Projections.fields(CourseReviewCriteriaCountsDto.class,
+                .select(Projections.constructor(CourseReviewCriteriaCountsDto.class,
                         category,
                         courseReview.count()))
                 .from(courseReview)
