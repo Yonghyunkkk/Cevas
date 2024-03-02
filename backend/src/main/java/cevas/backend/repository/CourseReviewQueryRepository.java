@@ -6,6 +6,7 @@ import cevas.backend.domain.QCourseReview;
 import cevas.backend.dto.CourseReviewCriteriaCountsDto;
 import cevas.backend.dto.CourseReviewLectureQualityDto;
 import cevas.backend.dto.CourseReviewPentagonDto;
+import cevas.backend.dto.CourseReviewProfessorStatisticsDto;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -46,19 +47,7 @@ public class CourseReviewQueryRepository {
     }
 
     public List<CourseReviewPentagonDto> findAverageForPentagon(Long courseId, String year, String professorName) {
-        NumberExpression<Double> gpaNumeric = new CaseBuilder()
-                .when(courseReview.gpa.eq("A+")).then(10.0)
-                .when(courseReview.gpa.eq("A")).then(9.0)
-                .when(courseReview.gpa.eq("A-")).then(8.0)
-                .when(courseReview.gpa.eq("B+")).then(7.0)
-                .when(courseReview.gpa.eq("B-")).then(6.0)
-                .when(courseReview.gpa.eq("B")).then(5.0)
-                .when(courseReview.gpa.eq("C+")).then(4.0)
-                .when(courseReview.gpa.eq("C-")).then(3.0)
-                .when(courseReview.gpa.eq("C")).then(2.0)
-                .when(courseReview.gpa.eq("D+")).then(1.0)
-                .when(courseReview.gpa.eq("D")).then(0.5)
-                .otherwise(0.0);
+        NumberExpression<Double> gpaNumeric = findGpaNumericValues();
 
         return queryFactory
                 .select(Projections.constructor(CourseReviewPentagonDto.class,
@@ -72,6 +61,24 @@ public class CourseReviewQueryRepository {
                 .fetch();
     }
 
+    public List<CourseReviewProfessorStatisticsDto> findAverageForPentagonByProfessor(Long courseId) {
+        NumberExpression<Double> gpaNumeric = findGpaNumericValues();
+
+        return queryFactory
+                .select(Projections.constructor(CourseReviewProfessorStatisticsDto.class,
+                        courseReview.professorName,
+                        gpaNumeric.avg().as("gpa"),
+                        courseReview.lectureDifficulty.avg(),
+                        courseReview.finalExamDifficulty.avg(),
+                        courseReview.workload.avg(),
+                        courseReview.lectureQuality.avg()))
+                .from(courseReview)
+                .where(courseIdEq(courseId))
+                .groupBy(courseReview.professorName)
+                .fetch();
+    }
+
+
     public List<CourseReviewCriteriaCountsDto> findWorkloadCounts(Long courseId, String year, String professorName) {
         return findCriteriaCounts(courseId, year, professorName, courseReview.workload);
     }
@@ -82,6 +89,22 @@ public class CourseReviewQueryRepository {
 
     public List<CourseReviewCriteriaCountsDto> findFinalExamDifficultyCounts(Long courseId, String year, String professorName) {
         return findCriteriaCounts(courseId, year, professorName, courseReview.finalExamDifficulty);
+    }
+
+    private NumberExpression<Double> findGpaNumericValues() {
+        return new CaseBuilder()
+                .when(courseReview.gpa.eq("A+")).then(10.0)
+                .when(courseReview.gpa.eq("A")).then(9.0)
+                .when(courseReview.gpa.eq("A-")).then(8.0)
+                .when(courseReview.gpa.eq("B+")).then(7.0)
+                .when(courseReview.gpa.eq("B-")).then(6.0)
+                .when(courseReview.gpa.eq("B")).then(5.0)
+                .when(courseReview.gpa.eq("C+")).then(4.0)
+                .when(courseReview.gpa.eq("C-")).then(3.0)
+                .when(courseReview.gpa.eq("C")).then(2.0)
+                .when(courseReview.gpa.eq("D+")).then(1.0)
+                .when(courseReview.gpa.eq("D")).then(0.5)
+                .otherwise(0.0);
     }
 
     private List<CourseReviewCriteriaCountsDto> findCriteriaCounts(Long courseId, String year, String professorName, NumberPath<Integer> criteriaPath) {
@@ -112,7 +135,6 @@ public class CourseReviewQueryRepository {
                 .where(courseIdEq(courseId), yearEq(year), professorNameEq(professorName))
                 .fetch();
     }
-
 
     private BooleanExpression courseIdEq(Long courseIdCond) {
         return courseIdCond != null ? courseReview.course.id.eq(courseIdCond) : null;

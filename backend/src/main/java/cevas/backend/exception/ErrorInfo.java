@@ -20,7 +20,12 @@ public enum ErrorInfo {
      */
     REVIEW_NOT_FOUND(400, "REVIEW_NOT_FOUND", "Review with the given id is not found"),
     REVIEW_ALREADY_EXIST(400, "REVIEW_ALREADY_EXIST", "Member has already left a review for course"),
-    TOTAL_RATIO_EXCEEDS(400, "TOTAL_RATIO_EXCEEDS", "Total ratio has exceeded 100");
+    TOTAL_RATIO_EXCEEDS(400, "TOTAL_RATIO_EXCEEDS", "Total ratio has exceeded 100"),
+
+    /**
+     * Subclass
+     */
+    SUBCLASS_NOT_FOUND(400, "SUBCLASS_NOT_FOUND", "Subclass with given courseId is not found");
 
     private final int statusCode;
     private final String errorCode;

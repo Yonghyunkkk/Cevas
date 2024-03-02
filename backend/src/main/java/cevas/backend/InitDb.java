@@ -3,6 +3,7 @@ package cevas.backend;
 import cevas.backend.domain.Course;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.domain.Member;
+import cevas.backend.domain.Subclass;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 
@@ -116,6 +117,9 @@ public class InitDb {
             em.persist(cr1);
             em.persist(cr2);
             em.persist(cr3);
+
+            Subclass s1 = Subclass.createSubclass(c1, "2024", "Dr. Bob");
+            em.persist(s1);
         }
 
 

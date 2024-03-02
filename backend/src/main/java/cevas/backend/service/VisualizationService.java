@@ -1,34 +1,35 @@
 package cevas.backend.service;
 
+import cevas.backend.controller.response.GetAvailableProfessorsVisualizationResponse;
 import cevas.backend.controller.response.GetCourseOverviewVisualizationResponse;
-import cevas.backend.domain.CourseReview;
+import cevas.backend.controller.response.GetProfessorStatisticsVisualizationResponse;
+import cevas.backend.domain.Subclass;
 import cevas.backend.dto.CourseReviewCriteriaCountsDto;
 import cevas.backend.dto.CourseReviewLectureQualityDto;
 import cevas.backend.dto.CourseReviewPentagonDto;
+import cevas.backend.dto.CourseReviewProfessorStatisticsDto;
 import cevas.backend.exception.CustomException;
-import cevas.backend.exception.ErrorInfo;
 import cevas.backend.repository.CourseRepository;
 import cevas.backend.repository.CourseReviewQueryRepository;
-import cevas.backend.repository.CourseReviewRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static cevas.backend.exception.ErrorInfo.COURSE_NOT_FOUND;
+import static cevas.backend.exception.ErrorInfo.SUBCLASS_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
 public class VisualizationService {
 
     private final CourseReviewQueryRepository courseReviewQueryRepository;
     private final CourseRepository courseRepository;
 
-    public GetCourseOverviewVisualizationResponse courseOverviewVisualizationResponse(Long courseId, String year, String professorName) {
+    public GetCourseOverviewVisualizationResponse getCourseOverview(Long courseId, String year, String professorName) {
 
         // check if course exists in DB
         courseRepository.findById(courseId)
@@ -36,7 +37,7 @@ public class VisualizationService {
 
         // get total number of reviews from DB
         Long totalCourseReviews = courseReviewQueryRepository.findTotalCourseReviews(courseId, year, professorName);
-        System.out.println("log = " + totalCourseReviews);
+
         // get number of gpa for each category
         List<CourseReviewCriteriaCountsDto> gpaCounts = courseReviewQueryRepository.findGpaCounts(courseId, year, professorName);
 
@@ -64,5 +65,42 @@ public class VisualizationService {
                 averageForPentagon,
                 averageForLectureQuality
         );
+    }
+
+    public GetProfessorStatisticsVisualizationResponse getProfessorStatistics(Long courseId) {
+        // check if course exists in DB
+        courseRepository.findById(courseId)
+                .orElseThrow(() -> new CustomException(COURSE_NOT_FOUND));
+
+        // get data for pentagon chart by each professor
+        List<CourseReviewProfessorStatisticsDto> averageForPentagonByProfessor = courseReviewQueryRepository.findAverageForPentagonByProfessor(courseId);
+
+        return new GetProfessorStatisticsVisualizationResponse(
+                averageForPentagonByProfessor
+        );
+    }
+
+    public List<String> getAvailableProfessors(Long courseId) {
+        // check if course exists in DB
+        courseRepository.findById(courseId)
+                .orElseThrow(() -> new CustomException(COURSE_NOT_FOUND));
+
+        // check if subclass with courseId exists in DB
+        List<String> professors = courseRepository.findSubclassProfessorByCourseId(courseId)
+                .orElseThrow(() -> new CustomException(SUBCLASS_NOT_FOUND));
+
+        return professors;
+    }
+
+    public List<String> getAvailableAcadmicYears(Long courseId) {
+        // check if course exists in DB
+        courseRepository.findById(courseId)
+                .orElseThrow(() -> new CustomException(COURSE_NOT_FOUND));
+
+        // check if subclass with courseId exists in DB
+        List<String> academicYears = courseRepository.findSubclassAcademicYearByCourseId(courseId)
+                .orElseThrow(() -> new CustomException(SUBCLASS_NOT_FOUND));
+
+        return academicYears;
     }
 }
