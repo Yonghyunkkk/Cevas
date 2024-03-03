@@ -4,10 +4,7 @@ import cevas.backend.controller.response.GetAvailableProfessorsVisualizationResp
 import cevas.backend.controller.response.GetCourseOverviewVisualizationResponse;
 import cevas.backend.controller.response.GetProfessorStatisticsVisualizationResponse;
 import cevas.backend.domain.Subclass;
-import cevas.backend.dto.CourseReviewCriteriaCountsDto;
-import cevas.backend.dto.CourseReviewLectureQualityDto;
-import cevas.backend.dto.CourseReviewPentagonDto;
-import cevas.backend.dto.CourseReviewProfessorStatisticsDto;
+import cevas.backend.dto.*;
 import cevas.backend.exception.CustomException;
 import cevas.backend.repository.CourseRepository;
 import cevas.backend.repository.CourseReviewQueryRepository;
@@ -92,7 +89,7 @@ public class VisualizationService {
         return professors;
     }
 
-    public List<String> getAvailableAcadmicYears(Long courseId) {
+    public List<String> getAvailableAcademicYears(Long courseId) {
         // check if course exists in DB
         courseRepository.findById(courseId)
                 .orElseThrow(() -> new CustomException(COURSE_NOT_FOUND));
@@ -102,5 +99,13 @@ public class VisualizationService {
                 .orElseThrow(() -> new CustomException(SUBCLASS_NOT_FOUND));
 
         return academicYears;
+    }
+
+    public void getYearlyTrend(Long courseId) {
+        // check if course exists in DB
+        courseRepository.findById(courseId)
+                .orElseThrow(() -> new CustomException(COURSE_NOT_FOUND));
+
+        List<CourseReviewYearlyTrendDto> yearlyTrends = courseReviewQueryRepository.findYearlyTrend(courseId);
     }
 }

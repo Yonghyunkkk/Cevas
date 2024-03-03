@@ -79,6 +79,15 @@ public class CourseReviewService {
                 courseReviewRequest.getProjectRatio()
         );
 
+        // add course statistics for current course
+        course.addCourseStatistics(
+                courseReviewRequest.getGpa(),
+                courseReviewRequest.getWorkload(),
+                courseReviewRequest.getLectureDifficulty(),
+                courseReviewRequest.getFinalExamDifficulty(),
+                courseReviewRequest.getLectureQuality()
+                );
+
         // save created course review
         CourseReview savedCourseReview = courseReviewRepository.save(courseReview);
         return savedCourseReview.getId();
@@ -112,6 +121,21 @@ public class CourseReviewService {
             throw new CustomException(UNAUTHORIZED_OPERATION);
         }
 
+        // update course statistic for current course
+        course.updateCourseStatistics(
+                courseReview.getGpa(),
+                courseReview.getWorkload(),
+                courseReview.getLectureDifficulty(),
+                courseReview.getFinalExamDifficulty(),
+                courseReview.getLectureQuality(),
+                courseReviewRequest.getGpa(),
+                courseReviewRequest.getWorkload(),
+                courseReviewRequest.getLectureDifficulty(),
+                courseReviewRequest.getFinalExamDifficulty(),
+                courseReviewRequest.getLectureQuality()
+        );
+
+        // update course review
         courseReview.updateCourseReview(
                 member,
                 course,
@@ -139,10 +163,23 @@ public class CourseReviewService {
         CourseReview courseReview = courseReviewRepository.findById(courseReviewId)
                 .orElseThrow(() -> new CustomException(REVIEW_NOT_FOUND));
 
+        // check if course exists in DB
+        Course course = courseRepository.findById(courseReview.getCourse().getId())
+                .orElseThrow(() -> new CustomException(COURSE_NOT_FOUND));
+
         // check if member has authorized access
         if (!Objects.equals(courseReview.getMember().getId(), memberId)) {
             throw new CustomException(UNAUTHORIZED_OPERATION);
         }
+
+        // remove course statistic for current course
+        course.removeCourseStatistics(
+                courseReview.getGpa(),
+                courseReview.getWorkload(),
+                courseReview.getLectureDifficulty(),
+                courseReview.getFinalExamDifficulty(),
+                courseReview.getLectureQuality()
+        );
 
         // delete course review
         courseReviewRepository.delete(courseReview);

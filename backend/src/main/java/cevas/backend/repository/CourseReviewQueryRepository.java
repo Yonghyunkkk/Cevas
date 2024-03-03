@@ -3,10 +3,7 @@ package cevas.backend.repository;
 
 import cevas.backend.domain.QCourse;
 import cevas.backend.domain.QCourseReview;
-import cevas.backend.dto.CourseReviewCriteriaCountsDto;
-import cevas.backend.dto.CourseReviewLectureQualityDto;
-import cevas.backend.dto.CourseReviewPentagonDto;
-import cevas.backend.dto.CourseReviewProfessorStatisticsDto;
+import cevas.backend.dto.*;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -75,6 +72,27 @@ public class CourseReviewQueryRepository {
                 .from(courseReview)
                 .where(courseIdEq(courseId))
                 .groupBy(courseReview.professorName)
+                .fetch();
+    }
+
+    public List<CourseReviewYearlyTrendDto> findYearlyTrend(Long courseId) {
+        NumberExpression<Double> gpaNumeric = findGpaNumericValues();
+
+        return queryFactory
+                .select(Projections.constructor(CourseReviewYearlyTrendDto.class,
+                        courseReview.professorName,
+                        courseReview.academicYear,
+                        gpaNumeric.avg().as("gpa"),
+                        courseReview.lectureDifficulty.avg(),
+                        courseReview.finalExamDifficulty.avg(),
+                        courseReview.workload.avg(),
+                        courseReview.lectureQuality.avg(),
+                        courseReview.courseEntertainment.avg(),
+                        courseReview.courseDelivery.avg(),
+                        courseReview.courseInteractivity.avg()))
+                .from(courseReview)
+                .where(courseIdEq(courseId))
+                .groupBy(courseReview.professorName, courseReview.academicYear)
                 .fetch();
     }
 

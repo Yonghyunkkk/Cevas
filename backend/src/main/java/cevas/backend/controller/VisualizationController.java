@@ -63,7 +63,7 @@ public class VisualizationController {
     public ResponseEntity<List<String>> getAvailableAcademicYears(
             @PathVariable(name = "courseId") Long courseId
     ) {
-        List<String> responseBody = visualizationService.getAvailableAcadmicYears(courseId);
+        List<String> responseBody = visualizationService.getAvailableAcademicYears(courseId);
 
         return ResponseEntity.ok().body(responseBody);
     }

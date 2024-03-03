@@ -57,69 +57,69 @@ public class InitDb {
             em.persist(c5);
             em.persist(c6);
 
-            CourseReview cr1 = CourseReview.createCourseReview(
-                    m1,
-                    c1,
-                    "2024",
-                    "Dr. Bob",
-                    "A+",
-                    5,
-                    5,
-                    6,
-                    5,
-                    5,
-                    5,
-                    5,
-                    20,
-                    20,
-                    20,
-                    30
-            );
-
-            CourseReview cr2 = CourseReview.createCourseReview(
-                    m2,
-                    c1,
-                    "2024",
-                    "Dr. Bob",
-                    "A+",
-                    10,
-                    10,
-                    10,
-                    10,
-                    5,
-                    5,
-                    5,
-                    20,
-                    20,
-                    20,
-                    30
-            );
-
-            CourseReview cr3 = CourseReview.createCourseReview(
-                    m3,
-                    c1,
-                    "2024",
-                    "Dr. Bob",
-                    "A+",
-                    10,
-                    10,
-                    8,
-                    5,
-                    5,
-                    5,
-                    5,
-                    20,
-                    20,
-                    20,
-                    30
-            );
-
-            em.persist(cr1);
-            em.persist(cr2);
-            em.persist(cr3);
-
-            Subclass s1 = Subclass.createSubclass(c1, "2024", "Dr. Bob");
-            em.persist(s1);
+//            CourseReview cr1 = CourseReview.createCourseReview(
+//                    m1,
+//                    c1,
+//                    "2024",
+//                    "Dr. Bob",
+//                    "A+",
+//                    5,
+//                    5,
+//                    6,
+//                    5,
+//                    5,
+//                    5,
+//                    5,
+//                    20,
+//                    20,
+//                    20,
+//                    30
+//            );
+//
+//            CourseReview cr2 = CourseReview.createCourseReview(
+//                    m2,
+//                    c1,
+//                    "2024",
+//                    "Dr. Bob",
+//                    "A+",
+//                    10,
+//                    10,
+//                    10,
+//                    10,
+//                    5,
+//                    5,
+//                    5,
+//                    20,
+//                    20,
+//                    20,
+//                    30
+//            );
+//
+//            CourseReview cr3 = CourseReview.createCourseReview(
+//                    m3,
+//                    c1,
+//                    "2024",
+//                    "Dr. Bob",
+//                    "A+",
+//                    10,
+//                    10,
+//                    8,
+//                    5,
+//                    5,
+//                    5,
+//                    5,
+//                    20,
+//                    20,
+//                    20,
+//                    30
+//            );
+//
+//            em.persist(cr1);
+//            em.persist(cr2);
+//            em.persist(cr3);
+//
+//            Subclass s1 = Subclass.createSubclass(c1, "2024", "Dr. Bob");
+//            em.persist(s1);
         }
 
 
