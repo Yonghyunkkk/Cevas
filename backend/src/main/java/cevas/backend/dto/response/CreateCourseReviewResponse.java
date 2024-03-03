@@ -1,4 +1,4 @@
-package cevas.backend.controller.response;
+package cevas.backend.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

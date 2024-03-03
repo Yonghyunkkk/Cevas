@@ -1,5 +1,6 @@
 package cevas.backend.repository;
 
+import cevas.backend.domain.Authority;
 import cevas.backend.domain.Course;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.domain.Member;
@@ -59,7 +60,7 @@ class CourseReviewRepositoryTest {
     }
 
     private Member createMember() {
-        Member member = Member.createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = Member.createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
         return memberRepository.save(member);
     }
 
