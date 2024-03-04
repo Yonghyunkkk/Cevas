@@ -1,4 +1,4 @@
-package cevas.backend.dto.request;
+package cevas.backend.controller.request;
 
 import cevas.backend.exception.CustomException;
 import cevas.backend.exception.ErrorInfo;

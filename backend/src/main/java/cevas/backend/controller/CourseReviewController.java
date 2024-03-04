@@ -1,9 +1,9 @@
 package cevas.backend.controller;
 
-import cevas.backend.dto.request.CreateCourseReviewRequest;
-import cevas.backend.dto.request.UpdateCourseReviewRequest;
-import cevas.backend.dto.response.CreateCourseReviewResponse;
-import cevas.backend.dto.response.GetCourseReviewResponse;
+import cevas.backend.controller.request.CreateCourseReviewRequest;
+import cevas.backend.controller.request.UpdateCourseReviewRequest;
+import cevas.backend.controller.response.CreateCourseReviewResponse;
+import cevas.backend.controller.response.GetCourseReviewResponse;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.service.CourseReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

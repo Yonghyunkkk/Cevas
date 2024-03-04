@@ -9,12 +9,6 @@ public enum ErrorInfo {
      */
     MEMBER_NOT_FOUND(400, "MEMBER_NOT_FOUND", "Member with the given id does not exist."),
     UNAUTHORIZED_OPERATION(400, "UNAUTHORIZED_OPERATION", "Member does not have right for this operation"),
-    EMAIL_ALREADY_EXIST(400, "EMAIL_ALREADY_EXIST", "There is already a member registered with the above email address" ),
-    NICKNAME_ALREADY_EXIST(400, "NICKNAME_ALREADY_EXIST", "There is already a member registered with the nickname. Please use another nickname." ),
-    INVALID_REFRESH_TOKEN(400,"INVALID_REFRESH_TOKEN", "Invalid Refresh Token"),
-    LOGOUT(400, "LOGOUT", "User has been logged out"),
-    INVALID_TOKEN_CREDENTIALS(400, "INVALID_TOKEN_CREDENTIALS", "Incorrect token user credentials"),
-    SECURITY_CONTEXT_ERROR(400, "SECURITY_CONTEXT_ERROR", "There is no verification info in Security Context"),
 
     /**
      * Course

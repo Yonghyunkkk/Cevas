@@ -1,11 +1,12 @@
 package cevas.backend.service;
 
-import cevas.backend.dto.request.CreateCourseReviewRequest;
-import cevas.backend.dto.request.UpdateCourseReviewRequest;
+import cevas.backend.controller.request.CreateCourseReviewRequest;
+import cevas.backend.controller.request.UpdateCourseReviewRequest;
 import cevas.backend.domain.Course;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.domain.Member;
 import cevas.backend.exception.CustomException;
+import cevas.backend.exception.ErrorInfo;
 import cevas.backend.repository.CourseRepository;
 import cevas.backend.repository.CourseReviewRepository;
 import cevas.backend.repository.MemberRepository;
