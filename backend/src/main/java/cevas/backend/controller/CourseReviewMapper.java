@@ -1,6 +1,6 @@
 package cevas.backend.controller;
 
-import cevas.backend.dto.response.GetCourseReviewResponse;
+import cevas.backend.controller.response.GetCourseReviewResponse;
 import cevas.backend.domain.CourseReview;
 import org.springframework.stereotype.Component;
 
