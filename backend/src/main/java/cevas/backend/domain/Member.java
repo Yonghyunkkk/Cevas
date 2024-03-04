@@ -3,6 +3,7 @@ package cevas.backend.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -19,23 +20,25 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "email address must not be left blank")
+    @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "Please enter a valid email address.")
     @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "nickname must not be left blank")
     @Column(name = "nickname", unique = true, nullable = false, length = 100)
     private String nickname;
 
-    @NotBlank
+    @NotBlank(message = "password must not be left blank")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,}$", message = "Password must be of 8-16 characters long, with at least 1 alphabet, at least 1 number and 1 special character.")
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "admission year must not be left blank")
     @Column(name = "admission_year", nullable = false, length = 4)
     private String admissionYear;
 
-    @NotBlank
+    @NotBlank(message = "major must not be left blank")
     @Column(name = "major", nullable = false, length = 100)
     private String major;
 
@@ -50,6 +53,9 @@ public class Member {
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<Course> favoriteCourses = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     public void addReviews(CourseReview review) {
         this.reviews.add(review);
         review.setMember(this);
@@ -61,7 +67,8 @@ public class Member {
             String nickname,
             String password,
             String admissionYear,
-            String major
+            String major,
+            Authority authority
     ) {
         Member member = Member.builder()
                 .email(email)
@@ -69,6 +76,7 @@ public class Member {
                 .password(password)
                 .admissionYear(admissionYear)
                 .major(major)
+                .authority(authority)
                 .build();
 
         return member;

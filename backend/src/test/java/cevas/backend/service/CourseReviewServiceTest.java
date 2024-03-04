@@ -1,7 +1,8 @@
 package cevas.backend.service;
 
-import cevas.backend.controller.request.CreateCourseReviewRequest;
-import cevas.backend.controller.request.UpdateCourseReviewRequest;
+import cevas.backend.domain.Authority;
+import cevas.backend.dto.request.CreateCourseReviewRequest;
+import cevas.backend.dto.request.UpdateCourseReviewRequest;
 import cevas.backend.domain.Course;
 import cevas.backend.domain.CourseReview;
 import cevas.backend.domain.Member;
@@ -38,7 +39,7 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_Test() {
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
 
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
@@ -69,7 +70,7 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_CourseNotFoundException_Test() throws Exception {
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
 
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
@@ -86,7 +87,7 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_ReviewAlreadyExistsException_Test() throws Exception {
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
 
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
@@ -104,7 +105,7 @@ class CourseReviewServiceTest {
 
     @Test
     public void createCourseReview_TotalRatioExceedsException_Test() throws Exception {
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
 
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
 
@@ -136,7 +137,7 @@ class CourseReviewServiceTest {
     @Test
     public void deleteCourseReview_Test() throws Exception {
         //given
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
@@ -150,7 +151,7 @@ class CourseReviewServiceTest {
     @Test
     public void deleteCourseReview_ReviewNotFound_Test() throws Exception {
         //given
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
@@ -166,7 +167,7 @@ class CourseReviewServiceTest {
     @Test
     public void deleteCourseReview_UnauthorizedOperationException_Test() throws Exception {
         //given
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
@@ -182,7 +183,7 @@ class CourseReviewServiceTest {
     @Test
     public void updateCourseReview_Test() throws Exception {
         //given
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
@@ -213,7 +214,7 @@ class CourseReviewServiceTest {
     @Test
     public void getSingleCourseReview_Test() throws Exception {
         //given
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
         Course course = createCourse("COMP3230", "Operating System", "Engineering");
         CourseReview courseReview = createCourseReview(member, course);
 
@@ -227,7 +228,7 @@ class CourseReviewServiceTest {
     @Test
     public void getAllCourseReview_Test() throws Exception {
         //given
-        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science");
+        Member member = createMember("yonghyunkwon98@gmail.com", "yonghyun", "abcdefg", "2018", "Computer Science", Authority.ROLE_USER);
         Course courseA = createCourse("COMP3230", "Operating System", "Engineering");
         Course courseB = createCourse("COMP2413", "Network", "Engineering");
 
@@ -241,8 +242,8 @@ class CourseReviewServiceTest {
         assertThat(allCourseReviews.size()).isEqualTo(2);
     }
 
-    private Member createMember(String mail, String name, String pwd, String admissionYear, String major) {
-        Member member = Member.createMember(mail, name, pwd, admissionYear, major);
+    private Member createMember(String mail, String name, String pwd, String admissionYear, String major, Authority authority) {
+        Member member = Member.createMember(mail, name, pwd, admissionYear, major, authority);
         return memberRepository.save(member);
     }
 
