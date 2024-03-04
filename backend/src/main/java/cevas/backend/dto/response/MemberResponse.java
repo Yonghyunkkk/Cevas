@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupResponse {
+public class MemberResponse {
     private String email;
     private String nickname;
+    private String password;
     private String admissionYear;
     private String major;
 
-    public static SignupResponse of(Member member) {
-        return new SignupResponse(member.getEmail(), member.getNickname(), member.getAdmissionYear(), member.getMajor());
+    public static  MemberResponse of(Member member) {
+        return new MemberResponse(member.getEmail(), member.getNickname(), member.getPassword(), member.getAdmissionYear(), member.getMajor());
     }
 }

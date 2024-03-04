@@ -1,26 +1,20 @@
 package cevas.backend.service;
 
-
-
-import cevas.backend.domain.Authority;
 import cevas.backend.domain.Member;
 import cevas.backend.domain.RefreshToken;
 import cevas.backend.dto.Token;
 import cevas.backend.dto.request.LoginRequest;
-import cevas.backend.dto.request.SignupRequest;
+import cevas.backend.dto.request.MemberRequest;
 import cevas.backend.dto.request.TokenRequest;
-import cevas.backend.dto.response.SignupResponse;
 import cevas.backend.exception.CustomException;
 import cevas.backend.exception.ErrorInfo;
 import cevas.backend.jwt.JwtProvider;
 import cevas.backend.repository.MemberRepository;
 import cevas.backend.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +24,6 @@ import org.springframework.validation.FieldError;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -41,15 +34,15 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member signup(SignupRequest signupRequest) {
-        if (memberRepository.existsByEmail(signupRequest.getEmail())) {
+    public Member signup(MemberRequest memberRequest) {
+        if (memberRepository.existsByEmail(memberRequest.getEmail())) {
             throw new CustomException(ErrorInfo.EMAIL_ALREADY_EXIST);
         }
-        else if (memberRepository.existsByNickname(signupRequest.getNickname())){
+        else if (memberRepository.existsByNickname(memberRequest.getNickname())){
             throw new CustomException(ErrorInfo.NICKNAME_ALREADY_EXIST);
         }
 
-        Member member = signupRequest.createMember(passwordEncoder);
+        Member member = memberRequest.createMember(passwordEncoder);
         return memberRepository.save(member);
     }
 
@@ -68,7 +61,6 @@ public class AuthService {
     public Token login(LoginRequest loginRequest) {
         // 로그인 credentials을 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = loginRequest.toAuthentication();
-        log.info(authenticationToken.getCredentials().toString());
         // 사용자 비밀번호 체크
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken); // causes 403 error
         // 인증 정보 기반으로 JWT 토큰 생성
@@ -114,7 +106,5 @@ public class AuthService {
 
         return tokenDto;
     }
-
-
 
 }

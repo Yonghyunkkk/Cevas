@@ -15,7 +15,7 @@ public enum ErrorInfo {
     LOGOUT(400, "LOGOUT", "User has been logged out"),
     INVALID_TOKEN_CREDENTIALS(400, "INVALID_TOKEN_CREDENTIALS", "Incorrect token user credentials"),
     SECURITY_CONTEXT_ERROR(400, "SECURITY_CONTEXT_ERROR", "There is no verification info in Security Context"),
-
+    WRONG_PASSWORD(400, "WRONG_PW", "Incorrect Password"),
     /**
      * Course
      */

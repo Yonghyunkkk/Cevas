@@ -30,7 +30,6 @@ public class Member {
     private String nickname;
 
     @NotBlank(message = "password must not be left blank")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,}$", message = "Password must be of 8-16 characters long, with at least 1 alphabet, at least 1 number and 1 special character.")
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
@@ -81,4 +80,24 @@ public class Member {
 
         return member;
     }
+
+    public void updateMember(
+            String email,
+            String nickname,
+            String admissionYear,
+            String major
+    ) {
+        this.email = email;
+        this.nickname = nickname;
+        this.admissionYear = admissionYear;
+        this.major = major;
+    }
+
+    public void changePw (
+            String password
+    ) {
+        this.password = password;
+    }
+
+
 }
